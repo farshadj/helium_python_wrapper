@@ -1,14 +1,9 @@
-from cpython cimport PyObject, Py_INCREF
+from cpython cimport PyObject, Py_INCREF,Py_buffer
 from cpython.pycapsule cimport *
-from ctypes import *
-from cpython cimport Py_buffer
+from cpython.buffer cimport *
 from libc.stdlib cimport malloc, free
 from libc.string cimport *
 from libc.stdio cimport *
-from cpython.buffer cimport *
-# Import the Python-level symbols of numpy
-
-# 
 cimport che
 import sys
 

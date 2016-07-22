@@ -16,7 +16,7 @@
 
 ## Important Files:
 * che.pxd: helium.h is redefined as C API in this file. This is almost identical to helium he.h file with minor 	  modifications. Cython is the language of the script. 
-* he.c: This file is the implementation of helium wrapper. Cython is the language of the script. 
+* he.pyx: This file is the implementation of helium wrapper. Cython is the language of the script. 
 * setup.py: Configuration file to build extension (.so file in Mac). File may need to change for different environment.  
 * build_extension.sh: Script to build so extension
 * system_test.py: Script to test the library. 
