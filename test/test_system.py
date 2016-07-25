@@ -119,6 +119,8 @@ class Test_Helium_Methods(unittest.TestCase):
         self.assertEqual(ret_close, 0, "he_close failed with code {}".format(he.he_strerror(ret_close)))
 
         pass
+    
+    
 
     def data_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))

@@ -158,14 +158,37 @@ class test_system():
         print("he_next test succeed.\n\n")
         return 0
     
+    def test_iterator(self):
+
+        h = he.he_open("he://./{}".format(self.DATASTORE_URL), self.DATASTORE_NAME, 0,None)
+   
+        if (h is None):
+            print("Handler failed to open %d".format(h))
+            return he.he_perror()
+        
+        print("Handler opened.")
+        
+        if (he.he_iterate(h, self.test_iterator_fun, 2)):
+                he.he_perror("he_iterate");
+        
+       
+       
+    @staticmethod
+    def test_iterator_fun(arg,he_item):
+        print("key={}==>key_len={}==>val={}==>val_len={}".
+                      format(he_item.key.decode("utf-8"),he_item.key_len,he_item.val.decode("utf-8"),he_item.val_len));
+        
+    
     def data_generator(self, size=6, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
 
+  
+        
 if __name__ == "__main__":
-    # import sys;sys.argv = ['', 'Test.testName']
     test_system=test_system()
     test_system.set_up()
     test_system.test_insert()
     test_system.test_insert_transaction()
     test_system.test_next()
+    #test_system.test_iterator()
     test_system.tear_down()

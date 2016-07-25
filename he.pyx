@@ -1,9 +1,11 @@
 from cpython cimport PyObject, Py_INCREF,Py_buffer
+from cpython.pystate cimport *
 from cpython.pycapsule cimport *
 from cpython.buffer cimport *
 from libc.stdlib cimport malloc, free
 from libc.string cimport *
 from libc.stdio cimport *
+from _ast import arg
 cimport che
 import sys
 
@@ -107,6 +109,7 @@ class he_item:
         self.val=val
         self.val_len=val_len
      
+
 
 ctypedef che.he_env he_env
 
@@ -370,17 +373,44 @@ cdef int he_prev_c(he,item,off,len):
     
     return value
     
- 
-def he_iterate(he,item,int cbf,arg):
+cdef struct callback_arg:
+    void *arg,
+    void *user_function
+                         
+
+cdef int he_iterate_callback(void *arg, const che.he_item *item):
+    """
+         This function is called by he_iterate callback function and it calls the 
+        
+    """    
+    inputarg=<callback_arg*> arg
+    f=inputarg.user_function
+    
+    py_item=he_item()
+    py_item.key=<object>item.key
+    py_item.val=<object>item.val
+    py_item.key_len=<int>item.key_len
+    py_item.val_len=<int>item.val_len
+     
+    ret_val=(<object>f)(<object>inputarg.arg,py_item)
+   
+    return ret_val
+    
+
+def he_iterate(he,cbf,arg):
     """
          helium he_iterate function
-         
+         issue: The issue of multithreating and GIL realease. 
     """
-    handler=<che.he_t> PyCapsule_GetPointer(he,'handler')
-    return <int> che.he_iterate(handler,<che.he_iterate_cbf_t>cbf,<void *>arg)
-  
- 
 
+    cdef callback_arg carg
+    carg.arg =<void*>arg
+    carg.user_function=<void*>cbf
+    
+    handler=<che.he_t> PyCapsule_GetPointer(he,'handler')
+   
+    che.he_iterate(handler,he_iterate_callback, &carg)
+ 
     
 def he_rename(he,name):
    

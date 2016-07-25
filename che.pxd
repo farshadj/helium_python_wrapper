@@ -98,7 +98,7 @@ cdef extern from "he.h":
 
     ctypedef void *he_t;
     ctypedef int (*he_enumerate_cbf_t)(void *arg, const char *name);
-    ctypedef int (*he_iterate_cbf_t)(void *arg, const he_item*  *item);
+    ctypedef int (*he_iterate_cbf_t)(void *arg, const he_item *item);
     int he_is_valid(const he_t he);
     int he_is_transaction(const he_t he);
 
